@@ -1,0 +1,33 @@
+
+.button{
+    background-color: darkred;
+    border: lightgray;
+    color: white;
+    padding: 32px 16px;
+    text-align: center;
+    font-weight: bolder;
+    text-decoration:none;
+    font-size: 20px;
+    margin: 75px;
+    top:50px;
+    border-radius: 12px;
+}
+
+.title{
+    border: 5px solid darkgray;
+    text-align: center;
+    padding: 20px;
+    background: repeating-linear-gradient( -45deg, #000 0px, #000 5px, #333 6px, #333 11px, #000 12px);
+}
+
+.topPadding{
+    padding-top: 30px;
+}
+
+.padding{
+    padding: 20px;
+}
+
+.container{
+    align-items: center;
+}
