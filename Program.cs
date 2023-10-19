@@ -5,8 +5,8 @@ using MySql.Data.MySqlClient;
 string newDay = "06/26/2023";
 string newType = "Running";
 string newDistance = "5";
-string newPinned = "Pinned";
-string newDeleted = "Deleted";
+bool newPinned = false;
+bool newDeleted = false;
 
 Database db = new Database();
 using var con = new MySqlConnection(db.cs);
@@ -22,6 +22,10 @@ using var cmd = new MySqlCommand(stm, con);
 // 	Console.WriteLine($"{rdr.GetInt32(0)} {rdr.GetString(1)} {rdr.GetString(2)}"); 
 // }
 // cmd.CommandText = @"UPDATE excercise set ExceId = @newExceId, Day = @newDay WHERE Id = @id";
+
+
+
+//here SPLIT //////////////////////////////////////////////////
 
 
 cmd.CommandText = @"INSERT INTO excercise(Day, Type, Distance, Pinned, Deleted) 
