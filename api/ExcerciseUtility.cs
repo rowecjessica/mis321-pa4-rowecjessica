@@ -38,6 +38,32 @@ namespace api
             return myExcercises;
         }
 
+        public static void AddExcercise(Excercise excercise)
+        {
+            // List<Excercise> myExcercises = new List<Excercise>();
+            
+            Database db = new Database();
+            using var con = new MySqlConnection(db.cs);
+            con.Open();
+
+            string stm = "INSERT INTO excercise(ExceId, Day, Type, Distance, Pinned, Deleted) VALUES(@ExceId, @Day, @Type, @Distance, @Pinned, @Deleted)";
+            using var cmd = new MySqlCommand(stm, con);
+
+            cmd.Parameters.AddWithValue("@ExceId", excercise.ExceId);
+            cmd.Parameters.AddWithValue("@Day", excercise.Day);
+            cmd.Parameters.AddWithValue("@Type", excercise.Type);
+            cmd.Parameters.AddWithValue("@Distance", excercise.Distance);
+            cmd.Parameters.AddWithValue("@Pinned", excercise.Pinned);
+            cmd.Parameters.AddWithValue("@Deleted", excercise.Deleted);
+
+            // cmd.Prepare();
+            cmd.ExecuteNonQuery();
+
+
+            con.Close();
+            // return myExcercises;
+        }
+
         // public List<Excercise> AddAnExcercise()
         // {
         //     List<Excercise> myExcercises = new List<Excercise>();

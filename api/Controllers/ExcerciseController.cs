@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using api.Model;
 using pa4;
+using api;
 
 namespace api.Controllers
 {
@@ -39,12 +40,28 @@ namespace api.Controllers
             return new Excercise();
         }
 
+
+
         // POST: api/Excercise
         [HttpPost]
-        public void Post([FromBody] Excercise value)
+        public void Post([FromBody] Excercise excercise)
         {    
-            System.Console.WriteLine(value.Type);
+            
+            ExcerciseUtility.AddExcercise(excercise); 
+            
+            // System.Console.WriteLine(value.Type);
 
+            // ExcerciseUtility utility = new ExcerciseUtility();
+            // List<Excercise> myExcercises = utility.AddExcercise(myExcercises);
+
+            // foreach(Excercise excercise in myExcercises)
+            // {
+            //     if(excercise.ExceId == id)
+            //     {
+            //         return excercise;
+            //     }
+            // }
+            // return new Excercise();
         }
 
 
@@ -54,6 +71,7 @@ namespace api.Controllers
         [HttpPut("{id}")]
         public void Put(int id, [FromBody] string value)
         {
+
         }
 
 

@@ -117,7 +117,7 @@ async function addExcercise()
 
 
 
-    await populateTable();
+    await handleOnLoad();
 }
 
 async function deleteExcercise()
@@ -139,7 +139,7 @@ async function pinExcercise()
 
 async function populateTable()
 {
-    await sortExcercises();
+    // await sortExcercises();
 
     let html = `
     <table class="table table-dark table-striped table-bordered">
@@ -182,17 +182,23 @@ async function populateTable()
 
 
 
-async function sortExcercises()
-{
-    console.log("sorting");
 
-    myExcercises.sort(function(a,b)
-    {
-        const dateA = new Date(a.Day);
-        const dateB = new Date(b.Day);
-        return dateA - dateB;
-    });
-}
+
+
+// async function sortExcercises()
+// {
+//     console.log("sorting");
+
+//     myExcercises.sort(function(a,b)
+//     {
+//         const dateA = new Date(a.Day);
+//         const dateB = new Date(b.Day);
+//         return dateA - dateB;
+//     });
+// }
+
+
+
 
 // function handleActivityAdd()
 // {  
