@@ -49,40 +49,18 @@ namespace api.Controllers
             
             ExcerciseUtility.AddExcercise(excercise); 
             
-            // System.Console.WriteLine(value.Type);
 
-            // ExcerciseUtility utility = new ExcerciseUtility();
-            // List<Excercise> myExcercises = utility.AddExcercise(myExcercises);
-
-            // foreach(Excercise excercise in myExcercises)
-            // {
-            //     if(excercise.ExceId == id)
-            //     {
-            //         return excercise;
-            //     }
-            // }
-            // return new Excercise();
         }
-
 
 
 
         // PUT: api/Excercise/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public void Put(int id, [FromBody] Excercise value)
         {
-
+            
+            ExcerciseUtility.EditExcercise(id, value);
         }
 
-
-
-
-
-        // DELETE: api/Excercise/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-            System.Console.WriteLine(id);
-        }
     }
 }

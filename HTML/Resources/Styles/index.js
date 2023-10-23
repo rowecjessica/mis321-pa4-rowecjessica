@@ -2,7 +2,6 @@
 let count = 0;
 let myExcercises = [];
 let myPoints = [];
-// let maxExceId = 0;
 
 const url = 'https://localhost:7203/api/Excercise';
 
@@ -12,33 +11,6 @@ async function handleOnLoad()
     let response = await fetch(url);
     let data = await response.json();
     myExcercises = data;
-
-    // myPoints.forEach(function(point) {
-
-    // })
-
-    
-    console.log("This is the import", myExcercises);
-    console.log("This is the import type", myExcercises[0].type)
-   
-    // myActivities = JSON.parse(localStorage.getItem('myActivities')) || [];
-    // if(!myActivities){myActivities= []};
-
-    // console.log(myActivities);
-    
-    // myActivities.forEach(activity => {
-    //     if (activity.Pinned === undefined) {
-    //         activity.Pinned = false;
-    //     }
-    // });
-
-    // myActivities.forEach(activity => {
-    //     if (activity.Deleted === undefined) {
-    //         activity.Deleted = false;
-    //     }
-    // });
-
-    // myExcercises = ExcerciseUtility.GetAllExcercises();
 
     let html = `
     <div class ="title">
@@ -80,18 +52,16 @@ async function handleOnLoad()
 
     <div id = "tableBody"></div> `;
 
-    
-
     document.getElementById('app').innerHTML=html;
     await populateTable();
 
 }
 
 
+
+
 async function addExcercise()
 {
-    // let excercise = {Day: document.getElementById('day').value, Type: document.getElementById('type').value, Distance: document.getElementById('distance').value, Pinned:false,  Deleted: false};
-    // console.log("what excercise am I saving:", excercise);
 
     const day = document.getElementById('day').value;
     const type = document.getElementById('type').value;
@@ -115,31 +85,90 @@ async function addExcercise()
         }
     })
 
+    await handleOnLoad();
+}
 
+
+
+
+
+async function deleteExcercise(exceId)
+{
+    let newExcercise;
+    for(let i = 0; i < myExcercises.length; i++){
+        if(myExcercises[i].exceId == exceId){
+            newExcercise = 
+            {
+                exceId: myExcercises[i].exceId,
+                day: myExcercises[i].day,
+                type: myExcercises[i].type,
+                distance: myExcercises[i].distance,
+                pinned: myExcercises[i].pinned,
+                deleted: !myExcercises[i].deleted
+            }
+
+        }
+
+    }
+
+    
+    await fetch(`${url}/${newExcercise.exceId}`, {
+        method: "PUT",
+        body: JSON.stringify(newExcercise),
+        headers:
+        {
+            "content-type": "application/json"
+        },
+
+    })
 
     await handleOnLoad();
 }
 
-async function deleteExcercise()
+
+
+
+async function pinExcercise(exceId)
 {
-    await fetch(url + '/1', {
-        method: "DELETE",
+    let newExcercise;
+    for(let i = 0; i < myExcercises.length; i++){
+        if(myExcercises[i].exceId == exceId){
+            newExcercise = 
+            {
+                exceId: myExcercises[i].exceId,
+                day: myExcercises[i].day,
+                type: myExcercises[i].type,
+                distance: myExcercises[i].distance,
+                pinned: !myExcercises[i].pinned,
+                deleted: myExcercises[i].deleted
+            }
+
+        }
+
+    }
+
+    
+    await fetch(`${url}/${newExcercise.exceId}`, {
+        method: "PUT",
+        body: JSON.stringify(newExcercise),
         headers:
         {
-            "Content-type": "application/json; charset=UTF-8"
-        }
+            "content-type": "application/json"
+        },
+
     })
+
+    await handleOnLoad();
 }
 
-async function pinExcercise()
-{
 
-}
+
+
 
 
 async function populateTable()
 {
-    // await sortExcercises();
+    await sortExcercises();
 
     let html = `
     <table class="table table-dark table-striped table-bordered">
@@ -157,8 +186,14 @@ async function populateTable()
         
     
         myExcercises.forEach(function(excercise) {
-            const isPinned = excercise.Pinned || false;
-            const buttonText = isPinned ? 'Pinned' : 'Pin';
+
+            let buttonText;
+            if(excercise.pinned)
+            {
+                buttonText = 'Pinned'
+            }else{
+                buttonText = 'pin'
+            }
             
            
                 html += `
@@ -167,8 +202,8 @@ async function populateTable()
                     <td>${excercise.type}</td>
                     <td>${excercise.distance}</td>
                     <td>
-                        <button class = "btn btn-secondary" onclick = "pinExcercise('${excercise.ExceId}')">${buttonText}</button>
-                        <button class = "btn btn-danger" onclick = "deleteExcercise('${excercise.ExceId}')">Delete</button>
+                        <button class = "btn btn-secondary" onclick = "pinExcercise('${excercise.exceId}')">${buttonText}</button>
+                        <button class = "btn btn-danger" onclick = "deleteExcercise('${excercise.exceId}')">Delete</button>
                     </td>
                 </tr>`;
             
@@ -183,74 +218,16 @@ async function populateTable()
 
 
 
-
-
-// async function sortExcercises()
-// {
-//     console.log("sorting");
-
-//     myExcercises.sort(function(a,b)
-//     {
-//         const dateA = new Date(a.Day);
-//         const dateB = new Date(b.Day);
-//         return dateA - dateB;
-//     });
-// }
-
-
-
-
-// function handleActivityAdd()
-// {  
+async function sortExcercises()
+{
     
-//     if (myActivities.length > 0) {
-//         myActivities.forEach(function(activity) {
-//             if (activity.ExceId > maxExceId) {
-//                 maxExceId = activity.ExceId;
-//                 console.log(maxExceId)
-//             }
-//         });
-//     }
+    myExcercises.sort(function(a, b) {
+        const dateA = new Date(a.day).getTime();
+        const dateB = new Date(b.day).getTime();
+        return dateB - dateA;
+    });
 
-//     let ID = maxExceId + 1;  
-//     maxExceId = ID;
-
-//     let activity = {ExceId: ID, Day: document.getElementById('day').value, Type: document.getElementById('type').value, Distance: document.getElementById('distance').value, Deleted: false};
-//     myActivities.push(activity);
-//     localStorage.setItem('myActivities', JSON.stringify(myActivities));
-    
-//     document.getElementById('day').value = "";
-//     document.getElementById('type').value = "";
-//     document.getElementById('distance').value = "";
-//     activity.Pinned = false;
-    
-//     populateTable();
-
-// }
+}
 
 
-// function handleActivityDelete(exceId)
-// {
-    
-//     const activityIndex = myActivities.findIndex(activity => activity.ExceId == exceId);
-
-    
-//     if (activityIndex !== -1) {
-//         myActivities.splice(activityIndex, 1);
-//         localStorage.setItem('myActivities', JSON.stringify(myActivities));
-//     }
-
-//     populateTable();   
-// }
-
-// function handleActivityPin(exceId) {
-
-//     const activityIndex = myActivities.findIndex(activity => activity.ExceId == exceId);
-
-//     if (activityIndex !== -1) {
-//         myActivities[activityIndex].Pinned = !myActivities[activityIndex].Pinned;
-//         localStorage.setItem('myActivities', JSON.stringify(myActivities));
-//     }
-//     populateTable();
-// }
 

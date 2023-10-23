@@ -24,8 +24,6 @@ namespace pa4
             cs = $"server={host};user={username};database={database};port={port};password={password}";
         }
 
-
-
         
     }
 }
